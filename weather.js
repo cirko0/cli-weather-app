@@ -5,6 +5,22 @@ dotenv.config({ path: "./config.env" });
 
 const key = process.env.API_KEY;
 
+function convertTemperature(data, unit) {
+  let temp;
+
+  if (unit === "°C") {
+    temp = data + "°C";
+  } else if (unit === "°F") {
+    temp = (+data * 1.8 + 32).toFixed(2) + "°F";
+  } else {
+    console.log(
+      "That unit does not exist or is not yet implemented. Please try some other ones."
+    );
+  }
+
+  return temp;
+}
+
 function fetchWeather(answers) {
   try {
     let url;
@@ -29,20 +45,13 @@ function fetchWeather(answers) {
           const data = JSON.parse(body);
           const name = data.name;
           let temp;
-
-          if (process.env.UNIT === "°C") {
-            temp = data.main.temp;
-          } else if (process.env.UNIT === "°F") {
-            temp = (+data.main.temp * 1.8 + 32).toFixed(2);
-          } else {
-            console.log(
-              "That unit does not exist or is not yet implemented try some other ones."
-            );
+          if (answers.unit) {
+            temp = convertTemperature(data.main.temp, answers.unit);
+          } else if (process.env.UNIT) {
+            temp = convertTemperature(data.main.temp, process.env.UNIT);
           }
 
-          console.log(
-            `The current temperature in ${name} is ${temp}${process.env.UNIT}.`
-          );
+          console.log(`The current temperature in ${name} is ${temp}.`);
         });
       } else {
         console.log("Something went wrong: " + Response.statusCode + " error");
