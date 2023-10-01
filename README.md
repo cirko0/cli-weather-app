@@ -1,6 +1,6 @@
 # Weather CLI App
 
-![Imgur](https://i.imgur.com/rFfHrWq.png)
+![weather-cli-app](https://i.imgur.com/rFfHrWq.png)
 
 This Weather CLI App fetches weather data and displays it to the user. It allows users to retrieve current weather information based on a provided city name or zip code.
 
