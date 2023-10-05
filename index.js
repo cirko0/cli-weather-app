@@ -78,7 +78,6 @@ async function displayAppInfo() {
   console.log("\nOptions:");
   console.log("  -v, --version           Output the current version.");
   console.log("  -h, --help              Display help for command.");
-
   console.log("\nCommands:");
   console.log("  exit");
   console.log(
@@ -116,11 +115,14 @@ program
     }).then((answers) => {
       readFile("./config.env", "utf-8")
         .then((data) => {
-          const updatedContent = data.replace(
-            /^LOCATION=.+$/m,
-            `LOCATION=${answers.location}`
-          );
-          return writeFile("./config.env", updatedContent);
+          const locationRegex = /^LOCATION=(.*)$/m;
+          if (!data.match(locationRegex)) {
+            data += "\nLOCATION=" + answers.location;
+          } else {
+            data = data.replace(locationRegex, `LOCATION=${answers.location}`);
+          }
+
+          return writeFile("./config.env", data);
         })
         .then(() => {
           console.log("Setting default location was successful.");
@@ -143,11 +145,14 @@ program
     prompt(listTemperatureUnit).then((answers) => {
       readFile("./config.env", "utf-8")
         .then((data) => {
-          const updatedContent = data.replace(
-            /^UNIT=.+$/m,
-            `UNIT=${answers.unit}`
-          );
-          return writeFile("./config.env", updatedContent);
+          const unitRegex = /^UNIT=(.*)$/m;
+          if (!data.match(unitRegex)) {
+            data += "\nUNIT=" + answers.unit;
+          } else {
+            data = data.replace(unitRegex, `UNIT=${answers.unit}`);
+          }
+
+          return writeFile("./config.env", data);
         })
         .then(() => {
           console.log("Setting default unit was successful.");

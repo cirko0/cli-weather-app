@@ -27,6 +27,12 @@ cd weather-cli-app
 npm install
 ```
 
+3. Install CLI globally:
+
+```bash
+npm install -g .
+```
+
 ## Usage
 
 To use the Weather CLI App, run the following command in the terminal:
